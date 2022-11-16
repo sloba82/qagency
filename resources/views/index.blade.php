@@ -7,6 +7,13 @@
             <div class="title m-b-md">
                 Q Agency Test
             </div>
+
+            {{-- @if(App\Services\ClientInfo()->auth)
+                <div class="title m-b-md">
+                    aaaaa
+                </div>
+            @endif --}}
+
         </div>
     </div>
 

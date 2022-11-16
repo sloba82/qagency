@@ -12,7 +12,16 @@
     </ul>
 
     <div class="col-md-3 text-end">
-      <a type="button" href="{{ route('auth.index') }}" class="btn btn-outline-primary me-2">Login</a>
-      <a type="button" href="{{ route('auth.logOut') }}" class="btn btn-primary">Sign-up</a>
+      @php
+          $clientInfo = new App\Helpers\ClientInfo
+      @endphp
+      @if($clientInfo->auth)
+        <p>{{ $clientInfo->user['first_name']}} {{ $clientInfo->user['last_name']}}</p>
+        <a type="button" href="{{ route('auth.logOut') }}" class="btn btn-primary">Log out</a>
+      @else
+        <a type="button" href="{{ route('auth.index') }}" class="btn btn-outline-primary me-2">Login</a>
+      @endif
+     
+      
     </div>
   </header>

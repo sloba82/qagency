@@ -5,30 +5,42 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\AuthUserServices;
 use App\Services\ClientInfo;
+use Illuminate\Http\RedirectResponse;
 
 class AuthUserController extends Controller
 {
 
+    private $authUserServices;
+
+    public function __construct(AuthUserServices $authUserServices)
+    {
+        $this->authUserServices = $authUserServices;
+    }
+
     public function index()
     {
-
         return view('auth.login');
     }
 
     public function login(Request $request, AuthUserServices $authUserServices)
     {
-   
+
         $input = $request->all();
-        $authUserServices->login($input['email'], $input['password']);
+        $input['email'] = 'ahsoka.tano@q.agency';
+        $input['password'] = 'Kryze4President';
 
-        $client = new ClientInfo;
-
-        dd($client->user);
-
+        if(!$this->authUserServices->login($input['email'], $input['password'])){
+            return view('auth.login');
+        }
+        else{
+            return view('index');
+        }
+        
     }
 
     public function logOut()
     {
+        $this->authUserServices->logOut();
         return view('index');
     }
 
