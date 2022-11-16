@@ -12,17 +12,22 @@ use Illuminate\Support\Facades\Session;
 
 class AuthUserServices
 {
+    private $clientInfo;
+
+    public function __construct(ClientInfo $clientInfo)
+    {
+        $this->clientInfo = $clientInfo;
+    }
+
 
     public function login($email, $password)
     {
-
-        $clientInfo = new ClientInfo;
         Log::info('test ClientInfo auth');
-        Log::info($clientInfo->auth);
+        Log::info($this->clientInfo->auth);
 
         $validUser = false;
 
-        if (!$clientInfo->auth) {
+        if (!$this->clientInfo->auth) {
             try {
                 Log::info('get user');
                 $response = Http::post(config('qSymfonySkeletonAPI.qSymfonySkeletonAPI_BASE_URL') . '/api/v2/token', [
