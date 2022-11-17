@@ -11,9 +11,7 @@ class ClientInfo {
     public function __construct()
     {
         if(Session::has('user')){
-            Log::info('ClientInfo');
-            Log::info(Session::get('user'));
-
+            
             $this->auth = true;
             foreach(Session::get('user') as $key => $value){
                 $this->$key = $value;

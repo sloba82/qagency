@@ -2,7 +2,8 @@
 namespace App\Services;
 
 use Exception;
-use ClientInfo;
+
+use App\Helpers\ClientInfo;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 
@@ -10,9 +11,9 @@ class AuthorServices {
 
     public $clientInfo;
 
-    public function __construct()
+    public function __construct(ClientInfo $clientInfo)
     {
-        $this->clientInfo = new ClientInfo;
+        $this->clientInfo = $clientInfo;
     }
 
     public function getAuthors()
