@@ -1,7 +1,7 @@
 
 ## Q Agency Test
 
-- .env is provided in root of the project, no need change anything
+- .env is provided in root of the project, no need to change anything
 
 
 clone the repo and please run next commands in your terminal
