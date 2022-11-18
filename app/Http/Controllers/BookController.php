@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Services\BookServices;
 use App\Services\AuthorServices;
+use App\Http\Requests\AddBookRequest;
 
 class BookController extends Controller
 {
@@ -18,25 +18,24 @@ class BookController extends Controller
         $this->bookServices = $bookServices;
     }
 
-
+    /**
+     * @return View
+     */
     public function create()
     {
-        $authors = $this->authorServices->getAuthors($id = 'id', $direction = 'ASC', $limit = 1000, $page = 1);
-
-        $authorArray = collect($authors['items'])->mapWithKeys(function ($item, $key) {
-            return [$item['id'] => $item['first_name'] . ' ' . $item['last_name']];
-        })->toArray();
-
-        return view('book.create', ['authors' => $authorArray]);
+        return view('book.create', ['authors' =>  $this->bookServices->create()]);
     }
 
-
-    public function store(Request $request)
+    /**
+     * @param AddBookRequest $request
+     * @return View
+     */
+    public function store(AddBookRequest $request)
     {
-        $input = $request->all();
+        $input = $request->validated();
 
         $data = [
-            'author' => ['id'=> (int) $input['author']],
+            'author' => ['id' => (int) $input['author']],
             'title' => $input['title'],
             'release_date' => $input['release_date'],
             'description' => $input['description'],
@@ -45,14 +44,26 @@ class BookController extends Controller
             'number_of_pages' => (int) $input['number_of_pages'],
         ];
 
-        $this->bookServices->addBook($data);
+        if ($this->bookServices->addBook($data)) {
+            return view('book.create', [
+                'authors' =>  $this->bookServices->create(),
+                'message' => 'Book is created!'
+            ]);
+        }
 
-
+        return view('book.create', [
+            'authors' =>  $this->bookServices->create(),
+            'message' => 'Something went wrong!'
+        ]);
     }
 
+    /**
+     * @param integer $book, $author
+     * @return View
+     */
     public function delete($book, $author)
     {
-        if($this->bookServices->deleteBookById($book)){
+        if ($this->bookServices->deleteBookById($book)) {
             return view('author.show', [
                 'author' => $this->authorServices->getAuthorById($author),
                 'message' => 'Book deleted!'
@@ -63,7 +74,5 @@ class BookController extends Controller
             'author' => $this->authorServices->getAuthorById($author),
             'message' => 'Something went wrong!'
         ]);
-
-        
     }
 }

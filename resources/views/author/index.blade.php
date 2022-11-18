@@ -24,18 +24,18 @@
       <td>{{$author['first_name']}}</td>
       <td>{{$author['last_name']}}</td>
       <td>
-        <div>
-          <a title="Show Author" class="btn btn-primary" href="{{ route('author.show', $author['id']) }}">Books<a>  
-        </div>
-        <div>
-          <form method="POST" action="{{ route('author.delete', $author['id'])  }}"  >
-            @method('DELETE')
-            @csrf
-            <button type='submit' class="btn btn-danger">
-              delete
-            </button>            
-          </form>
-        </div>
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+          <li><a title="Show Author" class="btn btn-primary" href="{{ route('author.show', $author['id']) }}">Books<a> </li>
+          <li>
+            <form method="POST" action="{{ route('author.delete', $author['id'])  }}"  >
+              @method('DELETE')
+              @csrf
+              <button type='submit' class="btn btn-danger">
+                delete
+              </button>            
+            </form>
+          </li>
+        </ul>
       </td>
     </tr>
     @endforeach

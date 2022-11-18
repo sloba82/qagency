@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Session;
 
 class ClientInfo {
 
-
     public function __construct()
     {
         if(Session::has('user')){

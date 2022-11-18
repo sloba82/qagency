@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\Http;
 class BookServices {
 
     private $httpRequest;
+    private $authorServices;
 
-    public function __construct(HttpRequest $httpRequest)
+    public function __construct(HttpRequest $httpRequest, AuthorServices $authorServices)
     {
         $this->httpRequest = $httpRequest;
+        $this->authorServices = $authorServices;
     }
 
     public function deleteBookById($id)
@@ -24,6 +26,22 @@ class BookServices {
             return true;
         }
         return false;
+    }
+
+    public function create()
+    {
+        $authors = $this->authorServices->getAuthors($id = 'id', $direction = 'ASC', $limit = 1000, $page = 1);
+
+        if($authors){
+            $authorArray = collect($authors['items'])->mapWithKeys(function ($item, $key) {
+                return [$item['id'] => $item['first_name'] . ' ' . $item['last_name']];
+            })->toArray();
+
+            return $authorArray;
+
+        }
+        
+        return [];
     }
 
     public function addBook($data)

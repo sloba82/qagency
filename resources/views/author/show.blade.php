@@ -2,8 +2,6 @@
 
 @section('content')
 
-{{dd($author)}}
-
 @if (isset($message))
   <div class="alert alert-warning message-text" role="alert">
     {{$message}}

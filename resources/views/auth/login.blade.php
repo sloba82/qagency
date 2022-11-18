@@ -8,17 +8,17 @@
   </div>
 @endif
 
-<form method="POST" action="{{ route('auth.login')  }}">
+<form method="POST" action="{{ route('auth.login') }}">
     @csrf
     <!-- Email input -->
     <div class="form-outline mb-4">
-      <input name="email" type="email" id="form2Example1" class="form-control" />
+      <input name="email" type="email" id="form2Example1" class="form-control"  required />
       <label class="form-label" for="form2Example1">Email address</label>
     </div>
   
     <!-- Password input -->
     <div class="form-outline mb-4">
-      <input name="password" type="password" id="form2Example2" class="form-control" />
+      <input name="password" type="password" id="form2Example2" class="form-control" required />
       <label class="form-label" for="form2Example2">Password</label>
     </div>
   

@@ -14,17 +14,28 @@ class AuthorController extends Controller
         $this->authorServices = $authorServices;
     }
 
+    /**
+     * @return View
+     */
     public function index()
     {
         $page = request()->get('page') ?? 1;
-        return view('author.index', ['authors' => $this->authorServices->getAuthors('id', 'ASC', 10, $page )]);
+        return view('author.index', ['authors' => $this->authorServices->getAuthors('id', 'ASC', 10, $page)]);
     }
 
+    /**
+     * @param integer $id
+     * @return View
+     */
     public function show($id)
     {
         return view('author.show', ['author' => $this->authorServices->getAuthorById($id)]);
     }
 
+    /**
+     * @param integer $id
+     * @return View
+     */
     public function delete($id)
     {
         if (!$this->authorServices->getAuthorById($id)['books']) {

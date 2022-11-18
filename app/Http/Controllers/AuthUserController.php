@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\AuthRequest;
 use App\Services\AuthUserServices;
-use App\Services\ClientInfo;
-use Illuminate\Http\RedirectResponse;
 
 class AuthUserController extends Controller
 {
@@ -17,32 +15,35 @@ class AuthUserController extends Controller
         $this->authUserServices = $authUserServices;
     }
 
+    /**
+     * @return View
+     */
     public function index()
     {
         return view('auth.login');
     }
 
-    public function login(Request $request)
+    /**
+     * @param AuthRequest $request
+     * @return View
+     */
+    public function login(AuthRequest $request)
     {
+        $input = $request->validated();
 
-        $input = $request->all();
-        $input['email'] = 'ahsoka.tano@q.agency';
-        $input['password'] = 'Kryze4President';
-
-        if(!$this->authUserServices->login($input['email'], $input['password'])){
-            return view('auth.login',['message' => 'Something went wrong !']);
-        }
-        else{
+        if (!$this->authUserServices->login($input['email'], $input['password'])) {
+            return view('auth.login', ['message' => 'Something went wrong !']);
+        } else {
             return view('index');
         }
-        
     }
 
+    /**
+     * @return View
+     */
     public function logOut()
     {
         $this->authUserServices->logOut();
         return view('index');
     }
-
-
 }
