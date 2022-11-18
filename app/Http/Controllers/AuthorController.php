@@ -4,24 +4,33 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\AuthorServices;
+use Illuminate\Routing\Redirector;
 
 class AuthorController extends Controller
 {
 
-    public function index(AuthorServices $authorServices)
+    public function __construct(AuthorServices $authorServices)
     {
-        return view('author.index', ['authors' => $authorServices->getAuthors()]);
+        $this->authorServices = $authorServices;
     }
 
-    public function show($id, AuthorServices $authorServices)
+    public function index()
     {
-        return view('author.show', ['author' => $authorServices->getAuthorById($id)]);
+        return view('author.index', ['authors' => $this->authorServices->getAuthors()]);
     }
 
-    public function delete($id, AuthorServices $authorServices)
+    public function show($id)
     {
-        if(!$authorServices->getAuthorById($id)['books']){
-            $authorServices->deleteAuthorById($id);
+        return view('author.show', ['author' => $this->authorServices->getAuthorById($id)]);
+    }
+
+    public function delete($id)
+    {
+        if (!$this->authorServices->getAuthorById($id)['books']) {
+            $this->authorServices->deleteAuthorById($id);
+            return redirect()->route('authors.index', ['message' => 'Author deleted!']);
         }
+        
+        return redirect()->route('authors.index', ['message' => 'The Author cannot be deleted!']);
     }
 }

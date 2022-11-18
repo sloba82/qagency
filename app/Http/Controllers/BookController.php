@@ -9,9 +9,19 @@ use App\Services\AuthorServices;
 class BookController extends Controller
 {
 
-    public function create(AuthorServices $authorServices)
+    private $authorServices;
+    private $bookServices;
+
+    public function __construct(AuthorServices $authorServices, BookServices $bookServices)
     {
-        $authors = $authorServices->getAuthors();
+        $this->authorServices = $authorServices;
+        $this->bookServices = $bookServices;
+    }
+
+
+    public function create()
+    {
+        $authors = $this->authorServices->getAuthors($id = 'id', $direction = 'ASC', $limit = 1000, $page = 1);
 
         $authorArray = collect($authors['items'])->mapWithKeys(function ($item, $key) {
             return [$item['id'] => $item['first_name'] . ' ' . $item['last_name']];
@@ -21,7 +31,7 @@ class BookController extends Controller
     }
 
 
-    public function store(Request $request, BookServices $bookServices)
+    public function store(Request $request)
     {
         $input = $request->all();
 
@@ -35,14 +45,13 @@ class BookController extends Controller
             'number_of_pages' => (int) $input['number_of_pages'],
         ];
 
-        $bookServices->addBook($data);
+        $this->bookServices->addBook($data);
 
-        
+
     }
 
-
-    public function delete($id, BookServices $bookServices)
+    public function delete($id)
     {
-        $bookServices->deleteBookById($id);
+        $this->bookServices->deleteBookById($id);
     }
 }

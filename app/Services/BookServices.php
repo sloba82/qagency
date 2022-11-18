@@ -2,40 +2,37 @@
 namespace App\Services;
 
 use App\Helpers\ClientInfo;
+use App\Helpers\HttpRequest;
 use Illuminate\Support\Facades\Http;
 
 
 
 class BookServices {
 
-    public $clientInfo;
+    private $httpRequest;
 
-    public function __construct(ClientInfo $clientInfo)
+    public function __construct(HttpRequest $httpRequest)
     {
-        $this->clientInfo = $clientInfo;
+        $this->httpRequest = $httpRequest;
     }
 
     public function deleteBookById($id)
     {
-        $response = Http::withHeaders([
-            'accept' => 'application/json',
-            'Authorization' => 'Bearer ' . $this->clientInfo->token_key
-        ])->delete(config('qSymfonySkeletonAPI.qSymfonySkeletonAPI_BASE_URL') . '/api/v2/books/'. $id );
+        $response = $this->httpRequest->requestApi('delete', '/api/v2/books/'. $id, []);
 
-        return json_decode($response->body(), true);
+        if ($response['status'] == 204){
+            return true;
+        }
+        return false;
     }
 
     public function addBook($data)
     {
-        $response = Http::withHeaders([
-            'accept' => 'application/json',
-            'Authorization' => 'Bearer ' . $this->clientInfo->token_key,
-            'X-Requested-With' => 'XMLHttpRequest'
-        ])->post(config('qSymfonySkeletonAPI.qSymfonySkeletonAPI_BASE_URL') . '/api/v2/books', 
-            $data
-        );
+        $response = $this->httpRequest->requestApi('post', '/api/v2/books', $data);
 
-        // status 200
-
+        if ($response['status'] == 200){
+            return true;
+        }
+        return false;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Services;
 
 use Exception;
 use ClientInfo;
+use App\Helpers\HttpRequest;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
@@ -12,43 +13,32 @@ use Illuminate\Support\Facades\Session;
 
 class AuthUserServices
 {
-    private $clientInfo;
 
-    public function __construct(ClientInfo $clientInfo)
+    private $httpRequest;
+
+    public function __construct(HttpRequest $httpRequest)
     {
-        $this->clientInfo = $clientInfo;
+
+        $this->httpRequest = $httpRequest;
     }
 
 
     public function login($email, $password)
     {
-        Log::info('test ClientInfo auth');
-        Log::info($this->clientInfo->auth);
+        $data = [
+            'email' => $email,
+            'password' => $password
 
-        $validUser = false;
+        ];
 
-        if (!$this->clientInfo->auth) {
-            try {
-                Log::info('get user');
-                $response = Http::post(config('qSymfonySkeletonAPI.qSymfonySkeletonAPI_BASE_URL') . '/api/v2/token', [
-                    'email' => $email,
-                    'password' => $password
-                ]);
+        $response = $this->httpRequest->requestApi('post', '/api/v2/token', $data);
 
-                if ($response->status() == 200) {
-                    Session::put('user', json_decode($response->body(), true));
-                    $validUser = true;
-                } else {
-                    $validUser = false;
-                }
-            } catch (Exception $e) {
-                Log::error('AuthUserServices: ' . $e->getMessage());
-            }
-        } else {
-            $validUser = true;
+        if($response['status'] == 200){
+            Session::put('user', $response['data']);
+            return true;
         }
 
-        return $validUser;
+        return false;
     }
 
 

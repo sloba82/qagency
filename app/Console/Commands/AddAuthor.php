@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Services\AuthorServices;
+use App\Services\AuthUserServices;
 
 class AddAuthor extends Command
 {
@@ -26,16 +27,22 @@ class AddAuthor extends Command
      *
      * @return int
      */
-    public function handle(AuthorServices $authorServices)
+    public function handle(AuthorServices $authorServices, AuthUserServices $authUserServices)
     {
+
+        $email = $this->ask('Login email?');
+        $password = $this->ask('Login password?');
+
         $first_name = $this->ask('Author first name?');
         $last_name = $this->ask('Author last name?');
         $birthday = $this->ask('Author birthday?');
         $biography = $this->ask('Author biography?');
-        $gender = $this->ask('Author gender?');
+        $gender = $this->choice( 'Author gender?', ['male', 'female'],  0, );
         $place_of_birth = $this->ask('Author place of birth?');
 
-        $authorServices->createAuthor([
+        $authUserServices->login($email, $password);
+
+        $response = $authorServices->createAuthor([
             'first_name' =>  $first_name,
             'last_name' =>  $last_name,
             'birthday' =>  $birthday,
@@ -44,6 +51,11 @@ class AddAuthor extends Command
             'place_of_birth' =>  $place_of_birth
         ]);
 
-        return Command::SUCCESS;
+
+        if($response){
+            return Command::SUCCESS;
+        }
+
+        return Command::FAILURE;
     }
 }

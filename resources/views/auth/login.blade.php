@@ -2,6 +2,12 @@
 
 @section('content')
 
+@if (isset($message))
+  <div class="alert alert-danger" role="alert">
+    {{$message}}
+  </div>
+@endif
+
 <form method="POST" action="{{ route('auth.login')  }}">
     @csrf
     <!-- Email input -->

@@ -24,13 +24,16 @@ Route::get('/login', [AuthUserController::class, 'index'])->name('auth.index');
 Route::get('/logOut', [AuthUserController::class, 'logOut'])->name('auth.logOut');
 Route::post('/login', [AuthUserController::class, 'login'])->name('auth.login');
 
+Route::middleware(['auth.user'])->group(function () {
+    Route::get('/authors', [AuthorController::class, 'index'])->name('authors.index');
+    Route::get('/author/books/{id}', [AuthorController::class, 'show'])->name('author.show');
+    Route::delete('/author/delete/{id}', [AuthorController::class, 'delete'])->name('author.delete');
+    
+    Route::delete('/book/delete/{id}', [BookController::class, 'delete'])->name('book.delete');
+    Route::get('/book/create', [BookController::class, 'create'])->name('book.create');
+    Route::post('/book/store', [BookController::class, 'store'])->name('book.store');
+});
 
-Route::get('/authors', [AuthorController::class, 'index'])->name('authors.index');
-Route::get('/author/books/{id}', [AuthorController::class, 'show'])->name('author.show');
-Route::delete('/author/delete/{id}', [AuthorController::class, 'delete'])->name('author.delete');
 
-Route::delete('/book/delete/{id}', [BookController::class, 'delete'])->name('book.delete');
-Route::get('/book/create', [BookController::class, 'create'])->name('book.create');
-Route::post('/book/store', [BookController::class, 'store'])->name('book.store');
 
 

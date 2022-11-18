@@ -10,7 +10,7 @@ class HttpRequest {
     public function requestApi($method, $url, $data)
     {
 
-        $response = [];
+        // $response = '';
       
         try {
 
@@ -30,7 +30,7 @@ class HttpRequest {
 
 
         return [ 
-            'data' => $response ? json_decode($response->body(), true) : [],
+            'data' => json_decode($response->body(), true),
             'status' => $response->status()
         ];
 

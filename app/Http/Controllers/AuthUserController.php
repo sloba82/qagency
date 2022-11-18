@@ -22,7 +22,7 @@ class AuthUserController extends Controller
         return view('auth.login');
     }
 
-    public function login(Request $request, AuthUserServices $authUserServices)
+    public function login(Request $request)
     {
 
         $input = $request->all();
@@ -30,7 +30,7 @@ class AuthUserController extends Controller
         $input['password'] = 'Kryze4President';
 
         if(!$this->authUserServices->login($input['email'], $input['password'])){
-            return view('auth.login');
+            return view('auth.login',['message' => 'Something went wrong !']);
         }
         else{
             return view('index');

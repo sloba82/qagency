@@ -2,7 +2,11 @@
 
 @section('content')
 
-{{-- {{dd($authors)}} --}}
+@if (isset($message))
+  <div class="alert alert-danger" role="alert">
+    {{$message}}
+  </div>
+@endif
 
 <table class="table">
   <thead>
@@ -20,10 +24,9 @@
       <td>{{$author['first_name']}}</td>
       <td>{{$author['last_name']}}</td>
       <td>
-        <a title="Show Author" href="{{ route('author.show', $author['id']) }}"><i class="fa fa-eye" aria-hidden="true"></i><a>  
 
-          {{-- <a title="Delete Author" href="{{ route('author.delete', $author['id']) }}"><i class="fa fa-trash" aria-hidden="true"></i><a>  --}}
-          
+        <a title="Show Author" class="btn btn-primary" href="{{ route('author.show', $author['id']) }}">Books<a>  
+ 
           <form method="POST" action="{{ route('author.delete', $author['id'])  }}"  >
             @method('DELETE')
             @csrf
