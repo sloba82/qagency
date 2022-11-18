@@ -50,8 +50,20 @@ class BookController extends Controller
 
     }
 
-    public function delete($id)
+    public function delete($book, $author)
     {
-        $this->bookServices->deleteBookById($id);
+        if($this->bookServices->deleteBookById($book)){
+            return view('author.show', [
+                'author' => $this->authorServices->getAuthorById($author),
+                'message' => 'Book deleted!'
+            ]);
+        }
+
+        return view('author.show', [
+            'author' => $this->authorServices->getAuthorById($author),
+            'message' => 'Something went wrong!'
+        ]);
+
+        
     }
 }

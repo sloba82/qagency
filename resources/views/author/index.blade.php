@@ -3,7 +3,7 @@
 @section('content')
 
 @if (isset($message))
-  <div class="alert alert-danger" role="alert">
+  <div class="alert alert-warning message-text" role="alert">
     {{$message}}
   </div>
 @endif
@@ -14,7 +14,7 @@
       <th scope="col">#</th>
       <th scope="col">First</th>
       <th scope="col">Last</th>
-      <th scope="col">Details</th>
+      <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
@@ -24,21 +24,27 @@
       <td>{{$author['first_name']}}</td>
       <td>{{$author['last_name']}}</td>
       <td>
-
-        <a title="Show Author" class="btn btn-primary" href="{{ route('author.show', $author['id']) }}">Books<a>  
- 
+        <div>
+          <a title="Show Author" class="btn btn-primary" href="{{ route('author.show', $author['id']) }}">Books<a>  
+        </div>
+        <div>
           <form method="POST" action="{{ route('author.delete', $author['id'])  }}"  >
             @method('DELETE')
             @csrf
             <button type='submit' class="btn btn-danger">
               delete
             </button>            
-           </form>
-
+          </form>
+        </div>
       </td>
     </tr>
     @endforeach
   </tbody>
 </table>
+
+<div>Pages </div>
+@foreach (range(1, $authors['total_pages']) as $page)
+  <a href="{{ route('authors.index', ['page' => $page]) }}">{{$page}}</a>
+@endforeach
 
 @stop

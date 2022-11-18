@@ -2,8 +2,6 @@
 
 @section('content')
 
-{{-- {{dd($authors)}} --}}
-
   <form action="{{ route('book.store') }}" method="POST">
     @csrf
 

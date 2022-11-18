@@ -209,7 +209,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'ClientInfo' => \App\Helpers\ClientInfo::class,
+        // 'ClientInfo' => \App\Helpers\ClientInfo::class,
     ])->toArray(),
 
 ];

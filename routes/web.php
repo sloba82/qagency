@@ -29,7 +29,7 @@ Route::middleware(['auth.user'])->group(function () {
     Route::get('/author/books/{id}', [AuthorController::class, 'show'])->name('author.show');
     Route::delete('/author/delete/{id}', [AuthorController::class, 'delete'])->name('author.delete');
     
-    Route::delete('/book/delete/{id}', [BookController::class, 'delete'])->name('book.delete');
+    Route::delete('/book/{book}/delete/author/{author}', [BookController::class, 'delete'])->name('book.delete');
     Route::get('/book/create', [BookController::class, 'create'])->name('book.create');
     Route::post('/book/store', [BookController::class, 'store'])->name('book.store');
 });

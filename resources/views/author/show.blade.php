@@ -2,7 +2,13 @@
 
 @section('content')
 
-{{-- {{dd($author)}} --}}
+{{dd($author)}}
+
+@if (isset($message))
+  <div class="alert alert-warning message-text" role="alert">
+    {{$message}}
+  </div>
+@endif
 
 <table class="table">
   <thead>
@@ -26,7 +32,7 @@
         <td>{{$book['format']}}</td>
         <td>{{$book['number_of_pages']}}</td>
         <td>
-          <form method="POST" action="{{ route('book.delete', $book['id']) }}"  >
+          <form method="POST" action="{{ route('book.delete', [ 'book' => $book['id'] , 'author' => $author['id']]) }}"  >
             @method('DELETE')
             @csrf
             <button type='submit' class="btn btn-danger">
